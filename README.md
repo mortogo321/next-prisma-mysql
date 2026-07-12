@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js + Prisma + MySQL Todo App
 
-## Getting Started
+A small full-stack todo application demonstrating Next.js App Router server actions with a Prisma ORM data layer on MySQL.
 
-First, run the development server:
+## What's inside
+
+- Server-rendered todo list and create form using React Server Components and Server Actions (no client-side API layer)
+- Prisma schema with `users`, `todo`, and `tags` models (many-to-many tags, one-to-many user/todo) plus a seed script
+- Form validation with Zod on the server action before writing to the database
+- Dockerized MySQL for local development
+
+## Tech stack
+
+- Next.js (App Router) with React and TypeScript
+- Prisma ORM
+- MySQL
+- Tailwind CSS + Flowbite components
+- Zod for input validation
+
+## Quickstart
 
 ```bash
-npm run dev
-# or
+# start MySQL via Docker
+docker compose -f docker/docker-compose.development.yaml up -d mysql
+
+# install dependencies
+yarn install
+
+# apply migrations and seed data
+yarn prisma migrate deploy
+yarn prisma db seed
+
+# run the dev server
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Or run the whole stack (app + MySQL) in Docker:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+docker compose -f docker/docker-compose.development.yaml up -d --build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+App: http://localhost:3000
 
-## Learn More
+## Structure
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+app/                 Next.js App Router pages and layout
+app/todo/            Todo list page and server action for creating todos
+app/components/      Navbar, sidebar, todo item UI
+app/db/              Prisma client, actions, and types
+prisma/              Schema, migrations, and seed script
+docker/              Dockerfile and Compose file for local MySQL + app
+```
